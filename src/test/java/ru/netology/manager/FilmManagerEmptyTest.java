@@ -1,13 +1,22 @@
-package ru.netology.domain;
+package ru.netology.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.netology.manager.FilmManager;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.netology.domain.FilmItem;
+import ru.netology.repository.FilmRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class FilmManagerEmptyTest {
-    FilmManager manager = new FilmManager(0);
+    @Mock
+    FilmRepository repository;
+    FilmManager manager = new FilmManager(repository,0);
     FilmItem first = new FilmItem(1, "Бладшот", "боевик");
     FilmItem second = new FilmItem(2, "Вперёд", "мультфильм");
     FilmItem third = new FilmItem(3, "Отель Белград", "комедия");
@@ -22,42 +31,40 @@ class FilmManagerEmptyTest {
 
     @BeforeEach
     void setup() {
-        manager = new FilmManager(0);
-
-
+        manager = new FilmManager(repository,0);
     }
 
     @Test
     void shouldAdd() {
-        manager.FilmAdd(first);
+        doReturn(new FilmItem[]{first}).when(repository).findAll();
+
         FilmItem[] expected = new FilmItem[]{first};
-        FilmItem[] actual = manager.getFilms();
+        FilmItem[] actual = manager.getSaved();
+
         assertArrayEquals(expected, actual);
+        verify(repository).findAll();
 
     }
 
     @Test
     void shouldNotDisplayFilmsIfNoFilms() {
+        doReturn(new FilmItem[]{}).when(repository).findAll();
+
         FilmItem[] expected = new FilmItem[]{};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
+
+        verify(repository).findAll();
     }
 
     @Test
     void shouldNotDisplayFilmsIfFilms() {
-        manager.FilmAdd(first);
-        manager.FilmAdd(second);
-        manager.FilmAdd(third);
-        manager.FilmAdd(fourth);
-        manager.FilmAdd(fifth);
-        manager.FilmAdd(sixth);
-        manager.FilmAdd(seventh);
-        manager.FilmAdd(eighth);
-        manager.FilmAdd(ninth);
-        manager.FilmAdd(tenth);
+        doReturn(new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth,tenth}).when(repository).findAll();
+
         FilmItem[] expected = new FilmItem[]{};
         FilmItem[] actual = manager.getAll();
-        assertArrayEquals(expected, actual);
-    }
 
+        assertArrayEquals(expected, actual);
+        verify(repository).findAll();
+    }
 }
