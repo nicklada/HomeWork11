@@ -54,7 +54,6 @@ class FilmRepositoryTest {
         repository.save(second);
         repository.save(third);
         int idToFind = 2;
-        FilmItem[] returned = new FilmItem[]{second};
         repository.findById(idToFind);
         FilmItem[] expected = new FilmItem[]{second};
         FilmItem[] actual = repository.findAll();
