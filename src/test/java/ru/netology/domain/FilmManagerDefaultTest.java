@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.manager.FilmManager;
 
-class FilmManagerTest {
+class FilmManagerDefaultTest {
     FilmManager manager;
     FilmItem first = new FilmItem(1, "Бладшот", "боевик");
     FilmItem second = new FilmItem(2, "Вперёд", "мультфильм");
@@ -22,56 +22,56 @@ class FilmManagerTest {
     @BeforeEach
     void setup() {
         manager = new FilmManager();
-        manager.FilmAdd(first);
-        manager.FilmAdd(second);
-        manager.FilmAdd(third);
-        manager.FilmAdd(fourth);
-        manager.FilmAdd(fifth);
-        manager.FilmAdd(sixth);
-        manager.FilmAdd(seventh);
-        manager.FilmAdd(eighth);
-        manager.FilmAdd(ninth);
 
-    }
-
-    @Test
-    void shouldAdd() {
-        FilmItem[] expected = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth};
-        FilmItem[] actual = manager.getFilms();
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    void shouldAddMoreThenDefault() {manager.FilmAdd(tenth);
-        manager.FilmAdd(eleventh);
-        FilmItem[] expected = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh};
-        FilmItem[] actual = manager.getFilms();
-        assertArrayEquals(expected, actual);
     }
 
     @Test
     void shouldDisplayLastTenIfTen() {
-        manager.FilmAdd(tenth);
+        manager.filmAdd(first);
+        manager.filmAdd(second);
+        manager.filmAdd(third);
+        manager.filmAdd(fourth);
+        manager.filmAdd(fifth);
+        manager.filmAdd(sixth);
+        manager.filmAdd(seventh);
+        manager.filmAdd(eighth);
+        manager.filmAdd(ninth);
+        manager.filmAdd(tenth);
         FilmItem[] expected = new FilmItem[]{tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
     }
 
-
     @Test
     void shouldDisplayLastTenIfMore() {
-        manager.FilmAdd(tenth);
-        manager.FilmAdd(eleventh);
+        manager.filmAdd(first);
+        manager.filmAdd(second);
+        manager.filmAdd(third);
+        manager.filmAdd(fourth);
+        manager.filmAdd(fifth);
+        manager.filmAdd(sixth);
+        manager.filmAdd(seventh);
+        manager.filmAdd(eighth);
+        manager.filmAdd(ninth);
+        manager.filmAdd(tenth);
+        manager.filmAdd(eleventh);
         FilmItem[] expected = new FilmItem[]{eleventh, tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldDisplayLastNine() {
-        FilmItem[] expected = new FilmItem[]{ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
+    void shouldDisplayLastOneIfOne() {
+        manager.filmAdd(first);
+        FilmItem[] expected = new FilmItem[]{first};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
     }
 
+    @Test
+    void shouldNotDisplayFilmsIfNoFilms() {
+        FilmItem[] expected = new FilmItem[]{};
+        FilmItem[] actual = manager.getAll();
+        assertArrayEquals(expected, actual);
+    }
 }

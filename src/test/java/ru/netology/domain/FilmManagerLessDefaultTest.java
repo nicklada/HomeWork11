@@ -23,16 +23,16 @@ class FilmManagerManagerLessDefaultTest {
     @BeforeEach
     void setup() {
         manager = new FilmManager(5);
-        manager.FilmAdd(first);
-        manager.FilmAdd(second);
-        manager.FilmAdd(third);
+        manager.filmAdd(first);
+        manager.filmAdd(second);
+        manager.filmAdd(third);
 
     }
 
     @Test
     void shouldDisplayLastFiveIfFive() {
-        manager.FilmAdd(fourth);
-        manager.FilmAdd(fifth);
+        manager.filmAdd(fourth);
+        manager.filmAdd(fifth);
         FilmItem[] expected = new FilmItem[]{fifth, fourth, third, second, first};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
@@ -40,14 +40,14 @@ class FilmManagerManagerLessDefaultTest {
 
     @Test
     void shouldDisplayLastFiveIfMore() {
-        manager.FilmAdd(fourth);
-        manager.FilmAdd(fifth);
-        manager.FilmAdd(sixth);
-        manager.FilmAdd(seventh);
-        manager.FilmAdd(eighth);
-        manager.FilmAdd(ninth);
-        manager.FilmAdd(tenth);
-        manager.FilmAdd(eleventh);
+        manager.filmAdd(fourth);
+        manager.filmAdd(fifth);
+        manager.filmAdd(sixth);
+        manager.filmAdd(seventh);
+        manager.filmAdd(eighth);
+        manager.filmAdd(ninth);
+        manager.filmAdd(tenth);
+        manager.filmAdd(eleventh);
         FilmItem[] expected = new FilmItem[]{eleventh, tenth, ninth, eighth, seventh};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
