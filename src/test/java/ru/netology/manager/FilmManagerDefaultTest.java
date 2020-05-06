@@ -1,19 +1,20 @@
 package ru.netology.manager;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.domain.FilmItem;
 import ru.netology.repository.FilmRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
-class FilmManagerMoreDefaultTest {
+class FilmManagerDefaultTest {
     @Mock
     FilmRepository repository;
     @InjectMocks
@@ -29,65 +30,58 @@ class FilmManagerMoreDefaultTest {
     FilmItem ninth = new FilmItem(9, "Волк с Уолл-Стрит", "драма");
     FilmItem tenth = new FilmItem(10, "Брат 2", "драма");
     FilmItem eleventh = new FilmItem(11, "Малифисента", "фэнтези");
-    FilmItem twelfth = new FilmItem(12, "Джуманджи", "приключения");
 
     @BeforeEach
     void setup() {
-       manager = new FilmManager(repository,11);
-       manager.filmAdd(first);
-       manager.filmAdd(second);
-       manager.filmAdd(third);
-       manager.filmAdd(fourth);
-       manager.filmAdd(fifth);
-       manager.filmAdd(sixth);
-       manager.filmAdd(seventh);
-       manager.filmAdd(eighth);
-       manager.filmAdd(ninth);
+        manager = new FilmManager(repository);
     }
 
     @Test
-    void shouldDisplayLastElevenIfEleven() {
-        manager.filmAdd(tenth);
-        manager.filmAdd(eleventh);
+    void shouldDisplayLastTenIfTen() {
+        FilmItem[] returned = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
+        doReturn(returned).when(repository).findAll();
+
+        FilmItem[] expected = new FilmItem[]{tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
+        FilmItem[] actual = manager.getAll();
+        assertArrayEquals(expected, actual);
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void shouldDisplayLastTenIfMore() {
         FilmItem[] returned = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh};
         doReturn(returned).when(repository).findAll();
 
-        FilmItem[] expected = new FilmItem[]{eleventh, tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
+        FilmItem[] expected = new FilmItem[]{eleventh, tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
 
         verify(repository, times(1)).findAll();
-        verify(repository).save(tenth);
-        verify(repository).save(eleventh);
     }
 
     @Test
-    void shouldDisplayLastElevenIfMore() {
-        manager.filmAdd(tenth);
-        manager.filmAdd(eleventh);
-        manager.filmAdd(twelfth);
-        FilmItem[] returned = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth};
+    void shouldDisplayLastOneIfOne() {
+        FilmItem[] returned = new FilmItem[]{first};
         doReturn(returned).when(repository).findAll();
 
-        FilmItem[] expected = new FilmItem[]{twelfth, eleventh, tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second};
+        FilmItem[] expected = new FilmItem[]{first};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
 
         verify(repository, times(1)).findAll();
-        verify(repository).save(tenth);
-        verify(repository).save(eleventh);
-        verify(repository).save(twelfth);
     }
 
     @Test
-    void shouldDisplayLastNine() {
-        FilmItem[] returned = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth};
+    void shouldNotDisplayFilmsIfNoFilms() {
+        FilmItem[] returned = new FilmItem[]{};
         doReturn(returned).when(repository).findAll();
 
-        FilmItem[] expected = new FilmItem[]{ninth, eighth, seventh, sixth, fifth, fourth, third, second,first};
+        FilmItem[] expected = new FilmItem[]{};
         FilmItem[] actual = manager.getAll();
         assertArrayEquals(expected, actual);
 
         verify(repository, times(1)).findAll();
     }
 }
+

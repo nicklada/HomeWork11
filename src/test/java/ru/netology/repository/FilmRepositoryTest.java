@@ -18,8 +18,6 @@ class FilmRepositoryTest {
     FilmItem eighth = new FilmItem(8, "Легенда", "триллер");
     FilmItem ninth = new FilmItem(9, "Волк с Уолл-Стрит", "драма");
     FilmItem tenth = new FilmItem(10, "Брат 2", "драма");
-    FilmItem eleventh = new FilmItem(11, "Малифисента", "фэнтези");
-
 
     @Test
     void shouldSave() {
@@ -30,13 +28,18 @@ class FilmRepositoryTest {
     }
 
     @Test
-    void shouldReturn() {
+    void shouldReturnTen() {
         repository.save(first);
         repository.save(second);
         repository.save(third);
         repository.save(fourth);
         repository.save(fifth);
-        FilmItem[] expected = new FilmItem[]{first, second, third, fourth, fifth};
+        repository.save(sixth);
+        repository.save(seventh);
+        repository.save(eighth);
+        repository.save(ninth);
+        repository.save(tenth);
+        FilmItem[] expected = new FilmItem[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
         FilmItem[] actual = repository.findAll();
         assertArrayEquals(expected, actual);
     }
@@ -55,9 +58,9 @@ class FilmRepositoryTest {
         repository.save(third);
         int idToFind = 2;
         repository.findById(idToFind);
-        FilmItem[] expected = new FilmItem[]{second};
-        FilmItem[] actual = repository.findAll();
-        assertArrayEquals(expected, actual);
+        FilmItem expected = second;
+        FilmItem actual = repository.findById(idToFind);
+        assertEquals(expected, actual);
 
     }
 
@@ -67,11 +70,10 @@ class FilmRepositoryTest {
         repository.save(second);
         repository.save(third);
         int idToFind = 5;
-        FilmItem[] returned = new FilmItem[]{null};
         repository.findById(idToFind);
-        FilmItem[] expected = new FilmItem[]{null};
-        FilmItem[] actual = repository.findAll();
-        assertArrayEquals(expected, actual);
+        FilmItem expected = null;
+        FilmItem actual = repository.findById(idToFind);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -85,6 +87,7 @@ class FilmRepositoryTest {
         FilmItem[] expected = new FilmItem[]{second,third};
         assertArrayEquals(expected, actual);
     }
+
     @Test
     void shouldNotRemoveIfNotExists() {
         int idToRemove = 4;
@@ -107,5 +110,4 @@ class FilmRepositoryTest {
         FilmItem[] actual = repository.findAll();
         assertArrayEquals(expected, actual);
     }
-
 }

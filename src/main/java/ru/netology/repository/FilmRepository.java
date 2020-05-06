@@ -1,13 +1,6 @@
 package ru.netology.repository;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.netology.domain.FilmItem;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class FilmRepository {
 
     private FilmItem[] films = new FilmItem[0];
@@ -17,15 +10,10 @@ public class FilmRepository {
     }
 
     public FilmItem findById(int id) {
-        int length = 1;
-        FilmItem[] tmp = new FilmItem[length];
-        int index = 0;
         for (FilmItem film : films) {
             if (film.getId() == id) {
-                tmp[index] = film;
-                index++;
+                return film;
             }
-            films = tmp;
         }
         return null;
     }
@@ -46,11 +34,11 @@ public class FilmRepository {
         for (FilmItem film : films) {
             if (film.getId() != id) {
                 tmp[index] = film;
-            index++;
+                index++;
+            }
         }
-    }
 
-    films =tmp;
+        films =tmp;
 
     }
 

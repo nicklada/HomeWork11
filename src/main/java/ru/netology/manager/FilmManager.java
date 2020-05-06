@@ -1,39 +1,44 @@
 package ru.netology.manager;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import ru.netology.domain.FilmItem;
 import ru.netology.repository.FilmRepository;
 
-@AllArgsConstructor
-@NoArgsConstructor
-
 public class FilmManager {
-    private FilmRepository repository = new FilmRepository();
-    private int lengthOfFilms = 10;
-    public FilmManager(FilmRepository repository){
-        this.repository=repository;
+
+    private FilmRepository repository;
+    private int defaultlengthOfFilms = 10;
+    private int lengthOfFilms;
+
+    public FilmManager(FilmRepository repository) {
+        this.repository = repository;
     }
 
+    public FilmManager(FilmRepository repository, int lengthOfFilms) {
+        this.repository = repository;
+        this.lengthOfFilms = lengthOfFilms;
+    }
 
-    public void FilmAdd(FilmItem film) {
+    public void filmAdd(FilmItem film) {
         repository.save(film);
     }
 
-    public FilmItem[] getSaved (){
-       return repository.findAll();
-    }
-
-
     public FilmItem[] getAll() {
-        FilmItem[] filmsFromRepo = repository.findAll();
-        if (filmsFromRepo.length < lengthOfFilms) {
-            lengthOfFilms = filmsFromRepo.length;
+        FilmItem [] filmsInRepo = repository.findAll();
+        int askedFilms = filmsInRepo.length;
+
+        if (lengthOfFilms <= 0) {
+            if (defaultlengthOfFilms < filmsInRepo.length) {
+                askedFilms = defaultlengthOfFilms;
+            }
+        } else {
+            if (lengthOfFilms < filmsInRepo.length) {
+                askedFilms = lengthOfFilms;
+            }
         }
-        FilmItem[] result = new FilmItem[lengthOfFilms];
+
+        FilmItem[] result = new FilmItem[askedFilms];
         for (int i = 0; i < result.length; i++) {
-            int index = filmsFromRepo.length - i - 1;
-            result[i] = filmsFromRepo[index];
+            int index = filmsInRepo.length - i - 1;
+            result[i] = filmsInRepo[index];
         }
         return result;
     }
